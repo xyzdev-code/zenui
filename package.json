@@ -1,0 +1,21 @@
+{
+  "name": "z",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "module",
+  "license": "ISC",
+  "jest": {
+    "transform": {},
+    "moduleDirectories": [
+      "node_modules", "<rootDir>"
+    ]
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
