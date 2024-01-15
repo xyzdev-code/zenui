@@ -42,6 +42,8 @@ class WeakRefSet{
 globalThis.scheduler = new Scheduler()
 /** @type {(null | (()=>any))} */
 globalThis.currEffect = null
+globalThis.$stateSymbol = Symbol("$state")
+globalThis.stateCount = 0
 /** 
   * @template T
   * @param {T} initial
@@ -50,9 +52,8 @@ export function $state(initial){
   let internalValue = initial
   /** @type {WeakRefSet<()=>any>} */
   const dependencies = new WeakRefSet()
-
-  
-  return {
+  globalThis.stateCount++
+    return {
     get value() {
       if(globalThis.currEffect){
         dependencies.add(globalThis.currEffect) 
@@ -72,7 +73,10 @@ export function $state(initial){
       if(globalThis.currEffect===null){
         scheduler.done()
       }
-    }
+    },
+    type: globalThis.$stateSymbol,
+    count: globalThis.stateCount,
+    toString: function(){return `<div data-z-state="${this.count}">${this.value}</div>`}
   }
 }
 

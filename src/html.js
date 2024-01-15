@@ -1,11 +1,15 @@
 import {$state} from "./state.js"
-// @ts-check
 /**
   * @param templateString {TemplateStringsArray}
-  * @param values {unknown[]}
+  * @param values {any[]}
   */
 function html(templateString, ...values){
-  setInterval(()=>{console.log(values[0])}, 100)
-  return templateString
+  for(const value of values){
+    if(value?.type === globalThis.$stateSymbol){
+      console.log(value)
+    }
+  } 
+  return templateString 
 }
-
+const a = $state(10)
+console.log(html`hello ${a}`)
