@@ -42,7 +42,7 @@ class WeakRefSet{
 globalThis.scheduler = new Scheduler()
 /** @type {(null | (()=>any))} */
 globalThis.currEffect = null
-globalThis.$stateSymbol = Symbol("$state")
+
 globalThis.stateCount = 0
 /** 
   * @template T
@@ -74,9 +74,8 @@ export function $state(initial){
         scheduler.done()
       }
     },
-    type: globalThis.$stateSymbol,
-    count: globalThis.stateCount,
-    toString: function(){return `<div data-z-state="${this.count}">${this.value}</div>`}
+    type: "$state",
+    count: globalThis.stateCount
   }
 }
 
