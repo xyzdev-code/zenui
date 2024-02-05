@@ -14,7 +14,7 @@ class Scheduler{
     this.effects.add(effect)
   }
   done(){
-    if(this.callSize===0 || this.callSize===1){
+    if(this.callSize<2){
       this.tick()
     }else{
       this.callSize--
@@ -42,8 +42,8 @@ class WeakRefSet{
 globalThis.scheduler = new Scheduler()
 /** @type {(null | (()=>any))} */
 globalThis.currEffect = null
-
 globalThis.stateCount = 0
+
 /** 
   * @template T
   * @param {T} initial
@@ -104,3 +104,4 @@ export function $computed(effect){
   })
   return internalValue
 }
+
