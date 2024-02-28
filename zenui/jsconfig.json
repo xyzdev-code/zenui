@@ -3,6 +3,7 @@
     "target": "es6",
     "strict": true,
     "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "allowJs": true,
     "checkJs": true,
     "lib": ["dom", "ESNext"],

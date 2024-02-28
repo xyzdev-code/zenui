@@ -1,3 +1,7 @@
+/**
+ * @template T
+ * @typedef {import("./global.js").State<T>} State
+ */
 class Scheduler{
   /** @type {Set<()=>any>} */
   effects = new Set()
@@ -47,6 +51,7 @@ globalThis.stateCount = 0
 /** 
   * @template T
   * @param {T} initial
+  * @returns {State<T>}
   */
 export function $state(initial){
   let internalValue = initial

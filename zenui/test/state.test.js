@@ -33,7 +33,7 @@ describe("$computed tests", ()=>{
     expect(ran).toBe(2)
   })
 })
-debugger
+
 describe("$effect tests", ()=>{
   const a = $state(0)
   const b = $state(1)

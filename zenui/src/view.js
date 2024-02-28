@@ -1,10 +1,10 @@
-import { $state } from "./state.js"
+
 /**
  * @typedef {import("./global.js").View} View
  * @typedef {import("./global.js").HTMLTags} HTMLTags
  */
 globalThis.componentId = 0
-const singleTagElements = ["<base>", "<br>","<col>","<embed>","<hr>","<img>","<input>","<link>","<meta>","<param>","<source>","<track>","<wbr>"]
+const singleTagElements = ["base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"]
 export class ViewBuilder{
     /**
      * @type {CSSStyleSheet | null}
@@ -53,9 +53,10 @@ class ClickViewBuilder extends ViewBuilder{
 
 class HTMLViewBuilder extends ViewBuilder{
     /**
-     * @type {HTMLTags | null}
+     * @type {HTMLTags}
+     * @public
      */
-    tag = null
+    tag = "div"
     /**
      * @param  {(ViewBuilder | String)[]} ViewBuilders 
      */
@@ -65,17 +66,32 @@ class HTMLViewBuilder extends ViewBuilder{
     }
     render(){
         /**
-        * @type {View[]} 
+        * @type {View[]}
         */
         const result = []
-        if(this.tag ? singleTagElements.includes(this.tag) : false){
-            result.push(`<${this.tag}/>`)
+        let single = false
+        if(singleTagElements.includes(this.tag)){
+            result.push(`</${this.tag}>`)
+            single = true
         }else{
             result.push(`<${this.tag}>`)
         }
         for(const builder of this.ViewBuilders){
             result.push(builder)
         }
-        result.push(`</>`)
+        if(!single){
+            result.push(`</${this.tag}>`)
+        }
+        return result
     }
 }
+class h1 extends HTMLViewBuilder{
+    /**
+     * @type {HTMLTags}
+     */
+    tag = "h1"
+    constructor(){
+        super()
+    }
+}
+console.log(new h1().render())
