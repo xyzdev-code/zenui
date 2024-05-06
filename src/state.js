@@ -28,7 +28,7 @@ class Scheduler{
 /** 
  * @template T
  */
-class WeakRefSet{
+export class WeakRefSet{
   /** @type {Array<WeakRef<T & WeakKey>>} */
   values = []
   /** @param {T & WeakKey} val*/
@@ -42,6 +42,9 @@ class WeakRefSet{
   clear(){
     this.values = []
   }
+  [Symbol.iterator](){
+    return this.values[Symbol.iterator]()
+  }
 }
 globalThis.scheduler = new Scheduler()
 /** @type {(null | (()=>any))} */
@@ -49,27 +52,27 @@ globalThis.currEffect = null
 globalThis.stateCount = 0
 
 /** 
-  * @template T
+  * @template T 
   * @param {T} initial
   * @returns {State<T>}
   */
 export function $state(initial){
-  let internalValue = initial
-  /** @type {WeakRefSet<()=>any>} */
-  const dependencies = new WeakRefSet()
   globalThis.stateCount++
-    return {
+  return {
+    internalValue: initial,
+    /** @type {WeakRefSet<()=>any>} */
+    dependencies: new WeakRefSet(),
     get value() {
       if(globalThis.currEffect){
-        dependencies.add(globalThis.currEffect) 
+        this.dependencies.add(globalThis.currEffect) 
       }
-      return internalValue
+      return this.internalValue
     },
     /** @param val {T} */
     set value(val){
-      internalValue = val 
+      this.internalValue = val 
       let curr;
-      for(const dependency of dependencies.values){
+      for(const dependency of this.dependencies){
         curr = dependency.deref()
         if(curr){
           scheduler.addEffect(curr)
@@ -80,7 +83,13 @@ export function $state(initial){
       }
     },
     type: "$state",
-    count: globalThis.stateCount
+    count: globalThis.stateCount,
+    valueOf(){
+      return this.value
+    },
+    toString(){
+      return String(this.value)
+    }
   }
 }
 
@@ -101,12 +110,9 @@ export function $effect(effect){
  * @param {()=>T} effect 
  */
 export function $computed(effect){
-  /** @type {ReturnType<typeof $state<T>>} */
-  // @ts-ignore
-  const internalValue = $state(null)
+  const internalValue = /** @type {State<T>} */ ($state(null))
   $effect(()=>{
       internalValue.value = effect()
   })
   return internalValue
 }
-
