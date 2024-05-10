@@ -24,7 +24,7 @@ describe("$computed tests", ()=>{
     expect(val3).toHaveProperty('value', 30)
     expect(val4).toHaveProperty('value', 50)
   })
-  test("Computed values mutate", ()=>{
+  test("Computed values mutate and are glitch-free.", ()=>{
     val.value += 10
     expect(val2.value).toBe(40)
     expect(val3.value).toBe(60)

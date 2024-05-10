@@ -28,7 +28,7 @@ class Scheduler{
 /** 
  * @template T
  */
-export class WeakRefSet{
+export class __WeakRefSet{
   /** @type {Array<WeakRef<T & WeakKey>>} */
   values = []
   /** @param {T & WeakKey} val*/
@@ -60,8 +60,8 @@ export function $state(initial){
   globalThis.stateCount++
   return {
     internalValue: initial,
-    /** @type {WeakRefSet<()=>any>} */
-    dependencies: new WeakRefSet(),
+    /** @type {__WeakRefSet<()=>any>} */
+    dependencies: new __WeakRefSet(),
     get value() {
       if(globalThis.currEffect){
         this.dependencies.add(globalThis.currEffect) 
